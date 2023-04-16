@@ -73,7 +73,7 @@ class _ExampleAlarmHomeScreenState extends State<ExampleAlarmHomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black45,
       appBar: const TrapezoidalAppBar(
-      title: "To Do List", color: Colors.blue,
+      title: "Reminder", color: Colors.blue,
     ),
       body: SafeArea(
         child: alarms.isNotEmpty

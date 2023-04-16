@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -99,13 +99,13 @@ class _RegisterPageState extends State<RegisterPage> {
               children:  [
                 // logo
                 const SizedBox(height: 30,),
-                const Text('The Big Project',
-                  style: TextStyle(fontSize: 40),
+                const Text('Care Dally',
+                  style: TextStyle(fontSize: 40, color: Colors.white),
                 ),
                 const SizedBox(height: 30,),
                 // welcome
                 const Text('Create An Account ',
-                    style: TextStyle(color: Colors.black,
+                    style: TextStyle(color: Colors.white,
                       fontSize: 20,
                     )
                 ),
@@ -174,7 +174,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: Text('Or continue with'),
+                        child: Text('Or continue with',
+                                style: TextStyle(color: Colors.white),),
                       ),
 
                       Expanded(child: Divider(
@@ -209,12 +210,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an Account?'),
+                    const Text('Already have an Account?', style: TextStyle(color: Colors.white),),
                     const SizedBox(width: 5,),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text('Login!', style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold, color: Colors.white
                       ),),
                     )
 

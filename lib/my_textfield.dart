@@ -20,12 +20,14 @@ class MyTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
-            enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey)),
-            focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black)
+            enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.circular(20.0)),
+            focusedBorder:  OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black),
+                borderRadius: BorderRadius.circular(20.0)
             ),
-            fillColor: Colors.white54,
+            fillColor: Colors.white,
             filled: true,
             hintText: hintText,
             hintStyle: TextStyle(color: Colors.grey.shade300,

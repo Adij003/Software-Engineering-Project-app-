@@ -10,7 +10,7 @@ class SquareTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.white),
+        decoration: BoxDecoration(border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.circular(15),
             color: Colors.grey[200]
         ),

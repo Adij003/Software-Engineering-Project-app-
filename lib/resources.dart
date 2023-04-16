@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:productivity_app/trapezoid_button.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+// note we have to change .yaml file
+
 class ResourceHomePage extends StatefulWidget {
   const ResourceHomePage({super.key});
 
@@ -16,20 +18,20 @@ class _ResourceHomePageState extends State<ResourceHomePage> {
   List <String> notes = [
     'Number_Theory.pdf',
     'Numerical_Diff.pdf',
-    ];
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('E-Library'),
-      ),
+      backgroundColor: Colors.black,
+      appBar: TrapezoidalAppBar(
+        title : 'E - Library', color: Colors.blue.shade800,),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton.icon(
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -37,11 +39,15 @@ class _ResourceHomePageState extends State<ResourceHomePage> {
                   ),
                 );
               },
-              icon: const Icon(Icons.book),
-              label: const Text('Important Books'),
+              child: Image.asset(
+                'assets/Icons/Group 18 (2).png',
+                width: 300,
+                height: 300,
+              ),
             ),
-            ElevatedButton.icon(
-              onPressed: () {
+            const SizedBox(height: 30),
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -49,8 +55,11 @@ class _ResourceHomePageState extends State<ResourceHomePage> {
                   ),
                 );
               },
-              icon: const Icon(Icons.book),
-              label: const Text('Notes'),
+              child: Image.asset(
+                'assets/Icons/Group 19.png',
+                width: 175,
+                height: 175,
+              ),
             ),
           ],
         ),
@@ -58,84 +67,145 @@ class _ResourceHomePageState extends State<ResourceHomePage> {
     );
   }
 }
-
 class BookListPage extends StatelessWidget {
   final List<String> books;
 
-  const BookListPage(this.books, {super.key});
+  BookListPage(this.books);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TrapezoidalAppBar(
-        title: 'Book List', color: Colors.blue,
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Book List'),
       ),
-      body: ListView.builder(
-        itemCount: books.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: const Icon(Icons.book),
-            title: Text(books[index]),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PdfViewerPage(
-                    key: UniqueKey(),
-                    assetPath: 'assets/pdfs/${books[index]}',
-                    bookName: books[index],
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: books.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Container(
+                      width: 200.0, // custom width of the ListTile
+                      height: 100.0, // custom height of the ListTile
+                      child: ListTileTheme(
+                        tileColor: Colors.blue.shade200.withOpacity(0.45),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          leading: Icon(Icons.book),
+                          title: Text(books[index]),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PdfViewerPage(
+                                  key: UniqueKey(),
+                                  assetPath: 'assets/books/${books[index]}',
+                                  bookName: books[index],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
 
 class NoteListPage extends StatelessWidget {
   final List<String> notes;
 
-  const NoteListPage(this.notes, {super.key});
+  NoteListPage(this.notes);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Notes List'),
+        title: Text('Notes List'),
       ),
-      body: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: const Icon(Icons.book),
-            title: Text(notes[index]),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PdfViewerPage(
-                    key: UniqueKey(),
-                    assetPath: 'assets/pdfs/${notes[index]}',
-                    bookName: notes[index],
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Container(
+                      width: 200.0, // custom width of the ListTile
+                      height: 100.0, // custom height of the ListTile
+                      child: ListTileTheme(
+                        tileColor: Colors.blue.shade200,
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          leading: Icon(Icons.book),
+                          title: Text(notes[index]),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PdfViewerPage(
+                                  key: UniqueKey(),
+                                  assetPath: 'assets/notes/${notes[index]}',
+                                  bookName: notes[index],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+// --------------------------------------------------------------------------------------------------------------------
+
+
 
 
 class PdfViewerPage extends StatefulWidget {
   final String assetPath;
   final String bookName;
-  const PdfViewerPage({required Key key, required this.assetPath, required this.bookName}) : super(key: key);
+  PdfViewerPage({required Key key, required this.assetPath, required this.bookName}) : super(key: key);
 
   @override
   _PdfViewerPageState createState() => _PdfViewerPageState();
@@ -157,3 +227,6 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
     );
   }
 }
+
+
+// --------------------------------------------------------------------------------------------------------------------

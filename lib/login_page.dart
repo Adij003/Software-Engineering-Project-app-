@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -78,19 +78,20 @@ class _LoginPageState extends State<LoginPage> {
               children:  [
                 // logo
                 const SizedBox(height: 70,),
-               const Text('The Big Project',
-                 style: TextStyle(fontSize: 40),
+               const Text('Clear Dally',
+                 style: TextStyle(fontSize: 40,
+                 color: Colors.white),
                ),
                 const SizedBox(height: 35,),
                 // welcome
                 const Text('Welcome To A ',
-                    style: TextStyle(color: Colors.black,
+                    style: TextStyle(color: Colors.white,
                       fontSize: 20,
                     )
                 ),
                 const SizedBox(height: 1,),
                 const Text('Productive World',
-                    style: TextStyle(color: Colors.black,
+                    style: TextStyle(color: Colors.white,
                       fontSize: 20,
                     )
                 ),
@@ -117,7 +118,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
-                      Text('Forgot Password?'),
+                      Text('Forgot Password?',
+                      style: TextStyle(color: Colors.white),),
                     ],
                   ),
                 ),
@@ -138,20 +140,21 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
-                    children:  [
+                    children:  const [
                       Expanded(child: Divider(
                         thickness: 0.5,
-                        color: Colors.grey[400],
+                        color: Colors.white,
                       )),
 
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: Text('Or continue with'),
+                        child: Text('Or continue with',
+                                style: TextStyle(color: Colors.white),),
                       ),
 
                       Expanded(child: Divider(
                         thickness: 0.5,
-                        color: Colors.grey[400],
+                        color: Colors.white,
                       ))
 
                     ],
@@ -181,12 +184,12 @@ class _LoginPageState extends State<LoginPage> {
                  Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
-                     const Text('Not a member?'),
+                     const Text('Not a member?', style: TextStyle(color: Colors.white),),
                      const SizedBox(width: 5,),
                      GestureDetector(
                        onTap: widget.onTap,
                        child: const Text('Register Now!', style: TextStyle(
-                         fontWeight: FontWeight.bold,
+                         fontWeight: FontWeight.bold, color: Colors.white
                        ),),
                      )
                      
