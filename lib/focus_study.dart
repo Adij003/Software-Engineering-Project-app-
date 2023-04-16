@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter/services.dart';
+import 'package:productivity_app/trapezoid_button.dart';
 
 class PomodoroTimer extends StatefulWidget {
   const PomodoroTimer({super.key});
@@ -9,114 +11,220 @@ class PomodoroTimer extends StatefulWidget {
 }
 
 class _PomodoroTimerState extends State<PomodoroTimer> {
-  Timer? _timer;
-  int _timeInSeconds = 1500; // 25 minutes
+  late Timer _timer;
+  int _timeLeftInSeconds = 0;
+  int _sessionTimeInSeconds = 25 * 60;
+  int _breakTimeInSeconds = 5 * 60;
+  bool _isSessionActive = true;
   bool _isRunning = false;
-  bool _isInBreak = false;
-  final int _breakDurationInSeconds = 300; // 5 minutes
+  int _pausedTime = 0;
+
+  final TextEditingController _sessionTimeController = TextEditingController();
+  final TextEditingController _breakTimeController = TextEditingController();
 
   void _startTimer() {
-    setState(() {
-      _isRunning = true;
-    });
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    if (_isRunning) return;
+    _isRunning = true;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        if (_timeInSeconds > 0) {
-          _timeInSeconds--;
-        } else if (_isInBreak) {
-          _timer?.cancel();
-          _isRunning = false;
+        if (_timeLeftInSeconds > 0) {
+          _timeLeftInSeconds--;
         } else {
-          _timeInSeconds = _breakDurationInSeconds;
-          _isInBreak = true;
+          _isSessionActive = !_isSessionActive;
+          _timeLeftInSeconds =
+          _isSessionActive ? _sessionTimeInSeconds : _breakTimeInSeconds;
         }
       });
     });
   }
 
+  void _pauseTimer() {
+    if (!_isRunning) return;
+    _isRunning = false;
+    _pausedTime = _timeLeftInSeconds;
+    _timer.cancel();
+  }
+
+  void _resumeTimer() {
+    if (_isRunning) return;
+    _isRunning = true;
+    _timeLeftInSeconds = _pausedTime;
+    _startTimer();
+  }
+
   void _stopTimer() {
-    if (_timer != null) {
-      _timer?.cancel();
-      setState(() {
-        _isRunning = false;
-      });
-    }
+    _isRunning = false;
+    _timer.cancel();
   }
 
   void _resetTimer() {
-    _stopTimer();
+    _isRunning = false;
+    _timer.cancel();
     setState(() {
-      _timeInSeconds = 1500; // 25 minutes
-      _isInBreak = false;
+      _isSessionActive = true;
+      _timeLeftInSeconds = _sessionTimeInSeconds;
     });
   }
 
-  String get _timerText {
-    Duration duration = Duration(seconds: _isInBreak ? _breakDurationInSeconds : _timeInSeconds);
-    return "${duration.inMinutes.remainder(60).toString().padLeft(2, '0')}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}";
+  void _setSessionTime() {
+    setState(() {
+      _sessionTimeInSeconds = int.parse(_sessionTimeController.text) * 60;
+      _timeLeftInSeconds = _sessionTimeInSeconds;
+    });
+    Navigator.pop(context);
+    _resetTimer();
   }
 
-  String get _timerLabel {
-    return _isInBreak ? "Break" : "Study";
+  void _setBreakTime() {
+    setState(() {
+      _breakTimeInSeconds = int.parse(_breakTimeController.text) * 60;
+    });
+    Navigator.pop(context);
+    _resetTimer();
+  }
+
+  void _showSessionTimeDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Session Time'),
+        content: TextField(
+          controller: _sessionTimeController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(
+            hintText: 'Enter session time in minutes',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: _setSessionTime,
+            child: Text('OK'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBreakTimeDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Break Time'),
+        content: TextField(
+          controller: _breakTimeController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(
+            hintText: 'Enter break time in minutes',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: _setBreakTime,
+            child: Text('OK'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timeLeftInSeconds = _sessionTimeInSeconds;
   }
 
   @override
   void dispose() {
-    _stopTimer();
     super.dispose();
+    _timer.cancel();
+  }
+
+  String _getTimeString(int timeInSeconds) {
+    int minutes = (timeInSeconds / 60).floor();
+    int seconds = timeInSeconds % 60;
+    String minutesStr = (minutes < 10 ? '0' : '') + minutes.toString();
+    String secondsStr = (seconds < 10 ? '0' : '') + seconds.toString();
+    return '$minutesStr:$secondsStr';
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: const Text("Pomodoro Timer"),
+    return Scaffold(
+      backgroundColor: Colors.black,
+        appBar: const TrapezoidalAppBar(
+          title:'Focus Study', color: Colors.blue,
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Text(
-                _timerLabel,
-                style: const TextStyle(fontSize: 32),
+                _isSessionActive ? 'Session' : 'Break',
+                style: const TextStyle(fontSize: 32,
+                        color: Colors.white
+                ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
-                _timerText,
-                style: const TextStyle(fontSize: 48),
+                _getTimeString(_timeLeftInSeconds),
+                style: TextStyle(fontSize: 64,
+                    color: Colors.white),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                   ElevatedButton(
-                    onPressed: _isRunning ? null : _startTimer,
-                    child: const Text("Start"),
+                    onPressed: _showSessionTimeDialog,
+                    child: Text('Set Session Time',),
                   ),
-                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: _showBreakTimeDialog,
+                    child: Text('Set Break Time'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: !_isRunning ? _startTimer : null,
+                    child: const Text('Start',
+                    style: TextStyle(color: Colors.white),),
+                  ),
+                  ElevatedButton(
+                    onPressed: _isRunning ? _pauseTimer : null,
+                    child: Text('Pause'),
+                  ),
                   ElevatedButton(
                     onPressed: _isRunning ? _stopTimer : null,
-                    child: const Text("Stop"),
+                    child: Text('Stop'),
                   ),
-                  const SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: _resetTimer,
-                    child: const Text("Reset"),
+                    onPressed: _isRunning ? _resumeTimer : null,
+                    child: Text('Resume'),
+                  ),
+                  ElevatedButton(
+                    onPressed: !_isRunning ? null : _resetTimer,
+                    child: Text('Reset'),
                   ),
                 ],
               )
             ],
           ),
         ),
-      ),
-    );
+      );
+
   }
 }

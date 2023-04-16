@@ -14,7 +14,7 @@ class MyButtonTask extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(color: Colors.grey[500],
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.8),
             borderRadius: BorderRadius.circular(10)),
 
         child: Center(

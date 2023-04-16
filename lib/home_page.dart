@@ -5,6 +5,7 @@ import 'package:productivity_app/main_ui_page.dart';
 import 'package:productivity_app/reminders.dart';
 import 'package:productivity_app/resources.dart';
 import 'package:productivity_app/new_to_do_list.dart';
+import 'trapezoid_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,48 +26,71 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [IconButton(onPressed: signOutUser,
-          icon: const Icon(Icons.logout))],
-          title: const Text('Welcome to The Big Project'),
+      backgroundColor: Colors.black,
+      appBar: const TrapezoidalAppBar(
+          title: 'Welcome to The Big Project', color: Colors.blue,
       ),
 
       body: SafeArea(
-        child: Center(
         child: Column(
           children: [
-            const SizedBox(height: 150,),
-            // To do list
-            MyButtonTask(
-                onTap: (){
+            Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 150,),
+                // To do list
+                MyButtonTask(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const ToDoListFun()));
+                    }
+                    , text: 'To Do List'),
+                const SizedBox(height: 50,),
+                // Focus Study
+                MyButtonTask(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const PomodoroTimer()));
+                    }
+                    , text: 'Focus Study'
+                ),
+                const SizedBox(height: 50,),
+                // Resources
+                MyButtonTask(onTap: (){
                   Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const ToDoListFun()));
-                }
-                , text: 'To Do List'),
-            const SizedBox(height: 50,),
-            // Focus Study
-            MyButtonTask(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const PomodoroTimer()));
-                }
-                , text: 'Focus Study'
+                      builder: (context) => const ResourceHomePage()));
+                }, text: 'Resources'),
+                const SizedBox(height: 50,),
+                // Reminders
+                MyButtonTask(onTap: (){
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Reminders()));
+                }, text: 'Reminders'),
+                const SizedBox(height: 50,),
+              ],
             ),
-            const SizedBox(height: 50,),
-            // Resources
-            MyButtonTask(onTap: (){
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const ResourceHomePage()));
-            }, text: 'Resources'),
-            const SizedBox(height: 50,),
-            // Reminders
-            MyButtonTask(onTap: (){
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Reminders()));
-            }, text: 'Reminders'),
-            const SizedBox(height: 50,),
-          ],
-        ),
       ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    onPressed: (){
+                      signOutUser();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Logout'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+
+        ),
 
       )
     );

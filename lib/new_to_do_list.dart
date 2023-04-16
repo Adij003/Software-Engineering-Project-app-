@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'trapezoid_button.dart';
 
 class ToDoListFun extends StatefulWidget {
   const ToDoListFun({Key? key}) : super(key: key);
@@ -93,86 +94,88 @@ class _ToDoListFunState extends State<ToDoListFun> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('To-Do List'),
-        backgroundColor: Colors.lightBlue,
-        centerTitle: true,
+      backgroundColor: Colors.black,
+      appBar: const TrapezoidalAppBar(
+        title: "To Do List", color: Colors.blue,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Add your Tasks',
-              style: TextStyle(fontSize: 16,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 60.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('Add your Tasks',
+                style: TextStyle(fontSize: 16,
+                    fontWeight: FontWeight.bold
+                ),
+              ),),
+            Text(
+              DateFormat('EEE, MMM d, yyyy').format(_currentDateTime),
+              style: const TextStyle(fontSize: 16,
                   fontWeight: FontWeight.bold
               ),
-            ),),
-          Text(
-            DateFormat('EEE, MMM d, yyyy').format(_currentDateTime),
-            style: const TextStyle(fontSize: 16,
-                fontWeight: FontWeight.bold
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            DateFormat('h:mm a').format(_currentDateTime),
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                // your existing ListView.builder code
-                itemCount: _items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _isCheckedList[index] ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.white,
-                        border: Border.all(
-                          color: Colors.blueGrey,
-                          width: 2.0,
+            const SizedBox(height: 8),
+            Text(
+              DateFormat('h:mm a').format(_currentDateTime),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  // your existing ListView.builder code
+                  itemCount: _items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _isCheckedList[index] ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.white.withOpacity(0.9),
+                          border: Border.all(
+                            color: Colors.blueGrey,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: CheckboxListTile(
-                              title: Text(
-                                _items[index],
-                                style: TextStyle(
-                                  color: _isCheckedList[index] ? Colors.white : Colors.black,
-                                  decoration: _isCheckedList[index] ? TextDecoration
-                                      .lineThrough : TextDecoration.none,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CheckboxListTile(
+                                title: Text(
+                                  _items[index],
+                                  style: TextStyle(
+                                    color: _isCheckedList[index] ? Colors.white : Colors.black,
+                                    decoration: _isCheckedList[index] ? TextDecoration
+                                        .lineThrough : TextDecoration.none,
+                                  ),
                                 ),
+                                value: _isCheckedList[index],
+                                onChanged: (bool? isChecked) {
+                                  setState(() {
+                                    _isCheckedList[index] = isChecked!;
+                                  });
+                                },
                               ),
-                              value: _isCheckedList[index],
-                              onChanged: (bool? isChecked) {
-                                setState(() {
-                                  _isCheckedList[index] = isChecked!;
-                                });
-                              },
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              _deleteTask(index);
-                            },
-                            icon: const Icon(Icons.delete),
-                          ),
-                        ],
+                            IconButton(
+                              onPressed: () {
+                                _deleteTask(index);
+                              },
+                              icon: const Icon(Icons.delete),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         // your existing FloatingActionButton code

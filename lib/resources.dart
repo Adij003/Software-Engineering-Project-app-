@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:productivity_app/trapezoid_button.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ResourceHomePage extends StatefulWidget {
@@ -66,8 +67,8 @@ class BookListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book List'),
+      appBar: const TrapezoidalAppBar(
+        title: 'Book List', color: Colors.blue,
       ),
       body: ListView.builder(
         itemCount: books.length,
