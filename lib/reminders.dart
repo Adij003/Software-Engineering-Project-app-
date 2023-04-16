@@ -19,13 +19,9 @@ class _RemindersState extends State<Reminders> {
           child: Center(
             child: SingleChildScrollView(
               child: Column(
-                children: const [
-                  Text("Welcome to Reminders"),
-                  SizedBox(height: 5,),
-                  Text('Please Hold!!'),
-                  SizedBox(height: 5,),
-                  Text('The App is under Development')
-                ],
+                children: [
+
+                ]
               ),
             ),
           )

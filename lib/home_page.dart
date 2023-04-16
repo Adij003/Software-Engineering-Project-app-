@@ -5,6 +5,7 @@ import 'package:productivity_app/main_ui_page.dart';
 import 'package:productivity_app/reminders.dart';
 import 'package:productivity_app/resources.dart';
 import 'package:productivity_app/new_to_do_list.dart';
+import 'package:productivity_app/screens/home.dart';
 import 'trapezoid_button.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                 // Reminders
                 MyButtonTask(onTap: (){
                   Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Reminders()));
+                  MaterialPageRoute(builder: (context) => const ExampleAlarmHomeScreen()));
                 }, text: 'Reminders'),
                 const SizedBox(height: 50,),
               ],
